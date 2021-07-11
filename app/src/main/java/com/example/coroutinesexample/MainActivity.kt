@@ -16,10 +16,6 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        GlobalScope.launch {
-            delay(5000L)
-            Log.d(TAG , "Coroutine says hello from thread ${Thread.currentThread().name}")
-        }
-        Log.d(TAG , "Hello from thread ${Thread.currentThread().name}")
+        
     }
 }
