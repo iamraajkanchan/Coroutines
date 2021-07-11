@@ -6,31 +6,35 @@ import android.util.Log
 import android.widget.TextView
 import kotlinx.coroutines.*
 
-class MainActivity : AppCompatActivity()
-{
+class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-    private lateinit var tvDummy : TextView
-    override fun onCreate(savedInstanceState : Bundle?)
-    {
+    private lateinit var tvDummy: TextView
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        tvDummy = findViewById(R.id.tv_dummy)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            Log.d(TAG , "Starting coroutine in thread ${Thread.currentThread().name}")
-            val result = doNetworkCalls()
-            withContext(Dispatchers.Main) {
-                Log.d(TAG , "Setting text in thread ${Thread.currentThread().name}")
-                tvDummy.text = result
+        Log.d(TAG, "Before runBlocking")
+
+//        runBlocking affects the Main Thread.
+        runBlocking {
+
+//        this launch code runs asynchronously.
+            launch {
+                delay(3000L)
+                Log.d(TAG, "Finished IO Coroutine 1")
             }
+
+            launch {
+                delay(3000L)
+                Log.d(TAG, "Finished IO Coroutine 2")
+            }
+
+            Log.d(TAG, "Start of runBlocking")
+            delay(5000L)
+            Log.d(TAG, "End of runBlocking")
         }
 
-    }
-
-    private suspend fun doNetworkCalls() : String
-    {
-        delay(3000L)
-        return "This is the response from first resource"
+        Log.d(TAG, "After runBlocking")
     }
 
 }
