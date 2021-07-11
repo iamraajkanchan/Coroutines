@@ -15,15 +15,28 @@ class MainActivity : AppCompatActivity() {
 
         val job = GlobalScope.launch(Dispatchers.Default) {
             repeat(5) {
-                Log.d(TAG, "Coroutine is still working...")
-                delay(1000L)
+                Log.d(TAG, "Starting long running calculation...")
+                for (i in 30..40) {
+                    if (isActive) {
+                        Log.d(TAG, "Result for i = $i: ${fib(i)}")
+                    }
+                }
+                Log.d(TAG, "Ending long running calculation...")
             }
         }
 
         runBlocking {
             delay(3000L)
             job.cancel()
-            Log.d(TAG, "Main Thread is continuing...")
+            Log.d(TAG, "Canceled job!")
+        }
+    }
+
+    private fun fib(n: Int): Long {
+        return when (n) {
+            0 -> 0
+            1 -> 1
+            else -> fib(n - 1) + fib(n - 2)
         }
     }
 
