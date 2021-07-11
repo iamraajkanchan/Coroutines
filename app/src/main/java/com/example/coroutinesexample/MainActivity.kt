@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         runBlocking {
             delay(3000L)
-            job.join()
+            job.cancel()
             Log.d(TAG, "Main Thread is continuing...")
         }
     }
